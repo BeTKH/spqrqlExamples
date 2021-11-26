@@ -1,0 +1,19 @@
+#Software category list from WikiData
+
+SELECT 
+?Software_Category 
+?Software_CategoryLabel 
+(COUNT(DISTINCT ?software) as ?num_software)
+#(GROUP_CONCAT(DISTINCT ?other_cat; SEPARATOR=", ") AS ?other)
+WHERE { 
+  ?Software_Category wdt:P279* wd:Q7397 . #P31 == instanceof # get human readable label 
+  ?Software_Category wdt:P31 wd:Q17155032.
+  OPTIONAL {
+    ?software wdt:P31 ?Software_Category.
+  }
+  #FILTER NOT EXISTS {?a wdt:P279 ?Software_Category}
+  
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". } # Helps get the label in your language, if not, then en language 
+} 
+GROUP BY ?Software_Category ?Software_CategoryLabel
+ORDER BY DESC(?num_software)
