@@ -1,4 +1,5 @@
 #Software category list from WikiData
+
 SELECT 
 ?Software_Category 
 ?Software_CategoryLabel 
@@ -16,3 +17,54 @@ WHERE {
 } 
 GROUP BY ?Software_Category ?Software_CategoryLabel
 ORDER BY DESC(?num_software)
+
+
+
+
+
+--------------------------------------------------------------
+#formatted version
+
+
+
+#Software category list from WikiData
+#(GROUP_CONCAT(DISTINCT ?other_cat; SEPARATOR=", ") AS ?other)
+SELECT 
+
+# selections 
+?Software_Category 
+?Software_CategoryLabel 
+(COUNT(DISTINCT ?software) AS ?num_software) 
+
+# conditions
+WHERE {
+  ?Software_Category wdt:P279* wd:Q7397; wdt:P31 wd:Q17155032.
+  OPTIONAL { ?software wdt:P31 ?Software_Category. }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+
+# presentation ( order)
+GROUP BY ?Software_Category ?Software_CategoryLabel
+#ORDER BY DESC (?num_software)
+ORDER BY ?Software_CategoryLabel
+
+
+-----------------------------------------------------------------------
+
+#simplified version
+
+SELECT  
+
+# selection
+?Software_Category 
+?Software_CategoryLabel 
+
+# condition
+WHERE {
+  ?Software_Category (wdt:P279*) wd:Q7397; wdt:P31 wd:Q17155032.
+  
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+
+# presentation ( oredrering) 
+ORDER BY ?Software_CategoryLabel 
