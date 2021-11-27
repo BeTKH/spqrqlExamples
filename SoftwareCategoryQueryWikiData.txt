@@ -1,5 +1,4 @@
 #Software category list from WikiData
-
 SELECT 
 ?Software_Category 
 ?Software_CategoryLabel 
